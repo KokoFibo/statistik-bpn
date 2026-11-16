@@ -1,0 +1,16 @@
+---
+interface Item { label: string; value: number; ket?: string }
+interface Props { items: Item[]; max?: number; unit?: string; tone?: 'ink' | 'teal' | 'sun'; top?: boolean; dec?: number }
+const { items, max, unit = '%', tone = 'teal', top = true, dec = 2 } = Astro.props;
+const m = max ?? Math.max(...items.map((i) => i.value));
+const fmt = (v: number) => v.toLocaleString('id-ID', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+---
+<ul class={`bars tone-${tone}`}>
+  {items.map((it, i) => (
+    <li class={top && i === 0 ? 'first' : ''}>
+      <span class="lbl">{it.label}{it.ket && <small>{it.ket}</small>}</span>
+      <span class="track"><span class="fill" style={`--w:${Math.max((it.value / m) * 100, 0.8)}%`}></span></span>
+      <span class="val">{fmt(it.value)}{unit}</span>
+    </li>
+  ))}
+</ul>

@@ -1,0 +1,108 @@
+---
+import '../styles/global.css';
+import Bars from '../components/Bars.astro';
+import * as d from '../data/kesra';
+const n = (v: number, f = 2) => v.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
+const sel = (v: number) => (v > 0 ? '+' : '') + n(v);
+const nav = [['ringkasan', 'Ringkasan'], ['tren', 'Tren'], ['pendidikan', 'Pendidikan'], ['kesehatan', 'Kesehatan'], ['rumah', 'Perumahan'], ['digital', 'Digital dan keuangan'], ['kesenjangan', 'Kesenjangan'], ['catatan', 'Catatan']];
+---
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Statistik Kesejahteraan Rakyat 2025 | Ringkasan dan analisis</title>
+<meta name="description" content="Analisis Statistik Kesejahteraan Rakyat 2025 (BPS, Susenas Maret 2025): tren 2021–2025, pendidikan, kesehatan, perumahan, TIK, dan kesenjangan." />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
+<body>
+<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+<header class="hero"><div class="wrap" style="padding-bottom:64px">
+  <h1>Hidup lebih terlindungi, tapi belum merata</h1>
+  <p class="lead">Jaminan kesehatan, akta kelahiran, dan sanitasi terus naik. Papua pedalaman dan wilayah pedesaan masih tertinggal jauh, terutama di pendidikan dan akses digital.</p>
+  <p class="src">Statistik Kesejahteraan Rakyat 2025 · BPS, Volume 40 · Susenas Maret 2025 · 345.000 rumah tangga, 514 kabupaten/kota</p>
+</div></header>
+
+<section class="s" id="ringkasan"><div class="wrap grid">
+  <header><h2>Ringkasan</h2><p>Publikasi ini hampir seluruhnya tabel. Ringkasan dibuat dari Statistik Kunci 2021–2025 dan baris nasional tiap tabel.</p></header>
+  <dl class="kf">
+    <div><dt>78,04%</dt><dd>penduduk punya jaminan kesehatan, naik dari 68,36% pada 2021. Masih ada 21,96% tanpa jaminan.</dd></div>
+    <div><dt>93,95%</dt><dd>anak 0–17 tahun punya akta kelahiran; untuk usia 0–4 tahun 86,76%.</dd></div>
+    <div><dt>11,37%</dt><dd>penduduk 15+ tahun tidak punya ijazah; sekitar 35% paling tinggi lulus SD.</dd></div>
+    <div><dt>77,63%</dt><dd>penduduk 5+ tahun memakai internet, hampir semuanya lewat ponsel (99,08%). Komputer hanya 12,99%.</dd></div>
+    <div><dt>43,02%</dt><dd>penduduk 5+ tahun di Papua Pegunungan tidak pernah sekolah, dibanding 5,17% secara nasional.</dd></div>
+  </dl>
+</div></section>
+
+<section class="s alt" id="tren"><div class="wrap grid">
+  <header><h2>Tren 2021–2025</h2><p>Kolom selisih menunjukkan perubahan dalam poin persentase, 2021 ke 2025.</p></header>
+  <div class="tw"><table class="cmp"><thead><tr><th>Indikator (%)</th><th>2021</th><th>2024</th><th>2025</th><th>Selisih</th></tr></thead><tbody>
+    {d.tren.map(([l, a, b, c]) => <tr><td>{l}</td><td>{n(a)}</td><td>{n(b)}</td><td><b>{n(c)}</b></td><td>{sel(c - a)}</td></tr>)}
+  </tbody></table>
+  <p class="note">Laju kenaikan jaminan kesehatan per tahun: +1,26, +2,76, +3,10, lalu +2,56 poin, jadi melambat pada 2025. Penerima PKH turun dari 15,57% ke 13,97% dan bantuan pangan dari 20,44% ke 18,07% dibanding 2024.</p></div>
+</div></section>
+
+<section class="s" id="pendidikan"><div class="wrap grid">
+  <header><h2>Pendidikan</h2><p>Partisipasi usia sekolah baik, tetapi fondasi dini dan jenjang tinggi lemah.</p></header>
+  <div>
+    <Bars items={d.pendidikan} tone="ink" top={false} />
+    <p class="t" style="margin-top:14px">Di usia 7–23 tahun, 75,43% masih bersekolah. Perempuan (76,41%) sedikit lebih tinggi dari laki-laki (74,47%). Hanya 29,12% anak 0–6 tahun sedang mengikuti prasekolah. Literasi huruf Latin 96,80% (laki-laki 97,99%, perempuan 95,61%).</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="kesehatan"><div class="wrap grid">
+  <header><h2>Kesehatan</h2><p>Banyak orang yang bergejala mengobati diri sendiri.</p></header>
+  <div>
+    <div class="stat"><b>28,31%</b><span>mengalami keluhan kesehatan sebulan terakhir (perempuan 30,17%, laki-laki 26,46%). Angka kesakitan 12,66%.</span></div>
+    <p class="t">Hanya 39,64% yang bergejala berobat jalan. Dari yang tidak berobat, 66,88% mengobati sendiri dan 30,57% merasa tidak perlu.</p>
+    <h3>Tempat rawat jalan</h3><Bars items={d.berobat} />
+    <p class="t" style="margin-top:14px">Rawat inap: RS swasta 43,75%, RS pemerintah 38,47%, rata-rata 4,71 hari. Jaminan kesehatan dipakai oleh 84,86% pasien rawat inap tetapi hanya 55,59% pasien rawat jalan. Merokok tembakau setiap hari 26,40% (ditambah 2,28% tidak setiap hari). Imunisasi balita 92,09%. Persalinan ditolong tenaga kesehatan 97,63% (bidan 50,55%, dokter kandungan 44,42%), dukun 2,05%.</p>
+  </div>
+</div></section>
+
+<section class="s" id="rumah"><div class="wrap grid">
+  <header><h2>Perumahan dan sanitasi</h2><p>Akses dasar hampir universal, tetapi kualitas sanitasi masih bolong.</p></header>
+  <div>
+    <Bars items={d.perumahan} />
+    <p class="t" style="margin-top:14px">85,07% rumah tangga menempati rumah milik sendiri (desa 92,97%, kota 79,63%). Lantai 64,83% keramik atau sejenisnya, dinding 82,46% tembok, atap 54,24% genteng. Air minum utama: air kemasan atau isi ulang 45,66%, leding hanya 9,17%. Sebanyak 5,34% rumah tangga punya luas lantai kurang dari 7,2 m² per kapita.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="digital"><div class="wrap grid">
+  <header><h2>Digital dan keuangan</h2><p>Ponsel jadi pintu utama internet dan layanan keuangan.</p></header>
+  <div>
+    <h3>Penggunaan teknologi</h3><Bars items={d.tik} tone="ink" top={false} />
+    <h3>Tujuan menggunakan internet</h3><Bars items={d.tujuan} />
+    <p class="note">Pilihan ganda, jadi tidak berjumlah 100%. Dari pengguna internet, 26,73% pernah membeli online, tetapi hanya 4,78% menjual.</p>
+    <h3>Uang elektronik dan kredit (rumah tangga)</h3><Bars items={d.keuangan} tone="sun" top={false} />
+    <p class="note">Bantuan sosial: penerima PKH 13,97% (91,83% masih tercatat; dana terutama untuk belanja pangan 87,76% dan biaya sekolah 48,24%), bantuan pangan 18,07%. Jaminan kerja: JKK 13,58%, JKM 11,59%, JHT 10,75%, pensiun 8,35%, JKP 2,33%.</p>
+  </div>
+</div></section>
+
+<section class="s" id="kesenjangan"><div class="wrap grid">
+  <header><h2>Kesenjangan</h2><p>Antara kota dan desa, laki-laki dan perempuan, serta antarprovinsi.</p></header>
+  <div class="tw">
+    <h3>Kota dan desa (%)</h3>
+    <table class="cmp"><thead><tr><th>Indikator</th><th>Kota</th><th>Desa</th></tr></thead><tbody>
+      {d.desaKota.map(([l, a, b]) => <tr><td>{l}</td><td class={a > b ? 'hi' : ''}>{n(a)}</td><td class={b > a ? 'hi' : ''}>{n(b)}</td></tr>)}
+    </tbody></table>
+    <h3>Laki-laki dan perempuan (%)</h3>
+    <table class="cmp"><thead><tr><th>Indikator</th><th>Laki-laki</th><th>Perempuan</th></tr></thead><tbody>
+      {d.gender.map(([l, a, b]) => <tr><td>{l}</td><td class={a > b ? 'hi' : ''}>{n(a)}</td><td class={b > a ? 'hi' : ''}>{n(b)}</td></tr>)}
+    </tbody></table>
+    <p class="note">Perempuan 10+ tahun berstatus cerai mati 9,72%, laki-laki 2,35%. Di usia 15–19 tahun, perempuan berstatus kawin 2,68% dan laki-laki 0,53%.</p>
+    <h3>Provinsi tertinggi dan terendah (%)</h3>
+    <table class="cmp"><thead><tr><th>Indikator</th><th>Nasional</th><th>Tertinggi</th><th>Terendah</th></tr></thead><tbody>
+      {d.provinsi.map(([l, nas, hi, lo]) => <tr><td>{l}</td><td>{nas}</td><td class="hi">{hi}</td><td class="lo">{lo}</td></tr>)}
+    </tbody></table>
+    <p class="note">Papua Pegunungan dan Papua Tengah berada di dasar hampir semua indikator. Pola yang menonjol: Aceh punya cakupan BPJS tertinggi tetapi imunisasi balita terendah, dan NTB mencatat keluhan kesehatan tertinggi.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="catatan"><div class="wrap grid">
+  <header><h2>Catatan data</h2><p>Batasan yang perlu diketahui sebelum mengutip.</p></header>
+  <ul class="rules">
+    <li><b>Cakupan baca.</b>Tabel estimasi sampling error (Bab IX, sekitar 120 tabel) belum ditelaah. Provinsi bersampel kecil seperti Papua Tengah dan Papua Pegunungan sebaiknya dicek ke tabel RSE.</li>
+    <li><b>Judul tabel rusak di PDF.</b>Arti beberapa kolom ditafsirkan dari header dan gambar halaman. Kolom terakhir tabel air minum dan kredit tidak dipakai karena belum terkonfirmasi.</li>
+    <li><b>Tidak ada angka kemiskinan.</b>Daftar isi publikasi tidak memuat kemiskinan atau pengeluaran rumah tangga.</li>
+    <li><b>Definisi internet berbeda.</b>77,63% di sini berbasis penduduk 5+ tahun, berbeda dari 72,78% yang dikutip di laporan E-Commerce.</li>
+  </ul>
+</div></section>
+<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik Kesejahteraan Rakyat 2025</em>, Volume 40 (ISSN 2502–7492). Angka dibaca dari tabel PDF; periksa ke <a href="https://www.bps.go.id">bps.go.id</a> untuk kutipan resmi.</div></footer>
+</body></html>

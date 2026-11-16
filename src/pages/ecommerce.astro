@@ -1,0 +1,206 @@
+---
+import '../styles/global.css';
+import Bars from '../components/Bars.astro';
+import * as d from '../data/ecom';
+const id = (n: number, f = 2) => n.toLocaleString('id-ID', { minimumFractionDigits: f, maximumFractionDigits: f });
+const maxT = Math.max(...d.tren.map((t) => t.juta));
+const tambah = d.tren[4].juta - d.tren[0].juta;
+const naikTrilun = d.transaksi.t2024 - d.transaksi.t2023;
+const byCount = [...d.provinsi].sort((a, b) => b[1] - a[1]);
+const byPen = [...d.provinsi].sort((a, b) => b[3] - a[3]).map(([label, , , value]) => ({ label, value }));
+const maxCount = byCount[0][1];
+const nav = [['ringkasan', 'Ringkasan'], ['pertumbuhan', 'Pertumbuhan'], ['pelaku', 'Pelaku usaha'], ['provinsi', 'Provinsi'], ['aktivitas', 'Aktivitas'], ['teknologi', 'Teknologi'], ['dampak', 'Dampak ekonomi'], ['catatan', 'Catatan']];
+---
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Statistik E-Commerce Indonesia 2024 | Ringkasan data BPS</title>
+  <meta name="description" content="Ringkasan detail publikasi BPS Statistik E-Commerce 2024: 4,40 juta usaha, transaksi Rp1.288,93 triliun, profil pelaku, teknologi, dan tantangan." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+<nav class="top" aria-label="Navigasi bagian"><div class="wrap"><a href="/">Semua laporan</a>{nav.map(([h, t]) => <a href={`#${h}`}>{t}</a>)}</div></nav>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>E-commerce Indonesia tumbuh, tapi masih lewat WhatsApp</h1>
+    <p class="lead">Jumlah usaha e-commerce naik 15,3% menjadi 4,40 juta pada 2024, dan 84,21% nilai transaksinya terjadi di luar marketplace. Ringkasan lengkap dari publikasi BPS.</p>
+    <p class="src">{d.meta.judul} · {d.meta.penerbit} · terbit {d.meta.terbit} · {d.meta.halaman} halaman</p>
+    <div class="growth" role="img" aria-label="Jumlah usaha e-commerce 2020 sampai 2024, dari 2,36 juta menjadi 4,40 juta">
+      {d.tren.map((t, i) => (
+        <div class="col">
+          <div class="n">{id(t.juta)}</div>
+          <div class="bar" style={`--h:${(t.juta / maxT) * 82}%;--i:${i}`}></div>
+          <div class="y">{t.tahun}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</header>
+
+<section class="s" id="ringkasan"><div class="wrap grid">
+  <header><h2>Ringkasan temuan</h2><p>Angka terpenting dari Survei E-Commerce 2025 yang mencatat kondisi tahun 2024.</p></header>
+  <div>
+    <dl class="kf">
+      <div><dt>4,40 juta</dt><dd>usaha e-commerce, naik 15,30% dari 2023 (3,82 juta).</dd></div>
+      <div><dt>Rp1.288,93 T</dt><dd>nilai transaksi e-commerce, naik 17,08% dari Rp1.100,87 T.</dd></div>
+      <div><dt>97,38%</dt><dd>usaha berskala mikro; terkonsentrasi di Jawa Barat, Jawa Timur, Jawa Tengah, dan DKI Jakarta.</dd></div>
+      <div><dt>94,76%</dt><dd>berjualan lewat aplikasi pesan instan; marketplace hanya dipakai 17,23% usaha.</dd></div>
+      <div><dt>84,21%</dt><dd>nilai transaksi berasal dari kanal non-marketplace (media sosial dan pesan instan).</dd></div>
+      <div><dt>74,79%</dt><dd>usaha paling sering menerima pembayaran tunai atau COD.</dd></div>
+      <div><dt>13,54%</dt><dd>usaha memakai komputer (laptop, PC, tablet); hanya 3,56% pernah ikut pelatihan teknologi informasi.</dd></div>
+      <div><dt>55,49%</dt><dd>usaha melaporkan pendapatan tidak berubah; hanya 19% naik, 25,50% turun.</dd></div>
+      <div><dt>36,41%</dt><dd>menyebut permodalan sebagai kendala utama, disusul pemasaran (20,52%) dan tenaga kerja terampil digital (16,03%).</dd></div>
+    </dl>
+    <p class="note">Survei: {id(d.survei.sampel, 0)} usaha di {d.survei.provinsi} provinsi dan {d.survei.kabkota} kabupaten/kota, margin of error {d.survei.moe}.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="pertumbuhan"><div class="wrap grid">
+  <header><h2>Pertumbuhan dan adopsi</h2><p>Jumlah usaha terus bertambah, tetapi lebih dari separuh usaha di Indonesia belum berjualan online.</p></header>
+  <div>
+    <h3>Jumlah usaha e-commerce, 2020–2024</h3>
+    <p class="t">Dalam empat tahun jumlah usaha bertambah {id(tambah)} juta, atau sekitar 86,4% dari level 2020. Pertumbuhan sempat melambat pada 2022 (3,00 juta) sebelum naik lagi.</p>
+    <Bars items={d.tren.map((t) => ({ label: String(t.tahun), value: t.juta }))} unit=" juta" top={false} />
+    <h3>Seberapa banyak usaha yang sudah berjualan online?</h3>
+    <div class="split" role="img" aria-label="42,02 persen online, 57,98 persen belum"><span class="a" style={`width:${d.adopsi.online}%`}>{id(d.adopsi.online)}% online</span><span class="b" style={`width:${d.adopsi.offline}%`}>{id(d.adopsi.offline)}% belum online</span></div>
+    <p class="legend">Proporsi usaha yang berjualan online naik {id(d.adopsi.naikPoin)} poin persentase dibanding 2023.</p>
+    <h3>Alasan usaha belum berjualan online</h3>
+    <Bars items={d.alasanOffline} tone="ink" />
+    <p class="note">Responden boleh memilih lebih dari satu alasan, jadi total melebihi 100%. Alasan terbesar adalah ketidaktertarikan (72,67%); kendala perangkat dan infrastruktur hanya 9,06%.</p>
+  </div>
+</div></section>
+
+<section class="s" id="pelaku"><div class="wrap grid">
+  <header><h2>Profil pelaku usaha</h2><p>Siapa yang berjualan: skala, sektor, usia, gender, pendidikan, dan tenaga kerja.</p></header>
+  <div>
+    <h3>Skala usaha menurut omzet</h3>
+    <Bars items={d.skala} dec={2} top={false} tone="ink" />
+    <h3>Sektor terbesar</h3>
+    <Bars items={d.sektor} />
+    <p class="note">Perdagangan besar dan eceran mendominasi. Di sektor akomodasi dan makan minum, pemesanan serta pengantaran online dan reservasi digital mendorong pemakaian e-commerce.</p>
+    <h3>Status usaha</h3>
+    <Bars items={d.entitas} tone="sun" />
+    <p class="note">Mayoritas usaha memproduksi sendiri barang atau jasanya. Dropshipper dan affiliator masih sangat kecil.</p>
+    <div class="two">
+      <div><h3>Usia pemilik/pengelola</h3><Bars items={d.umur} /></div>
+      <div><h3>Pendidikan pemilik/pengelola</h3><Bars items={d.pendidikan} tone="ink" top={false} /></div>
+    </div>
+    <h3>Gender pemilik/pengelola</h3>
+    <div class="split" role="img" aria-label="Laki-laki 55,53 persen, perempuan 44,47 persen"><span class="e" style={`width:${d.gender.laki2024}%`}>Laki-laki {id(d.gender.laki2024)}%</span><span class="d" style={`width:${d.gender.perempuan2024}%`}>Perempuan {id(d.gender.perempuan2024)}%</span></div>
+    <p class="legend">Porsi perempuan naik 1,69 poin persentase dari 2023 (laki-laki 57,22%).</p>
+    <h3>Tenaga kerja</h3>
+    <p class="t">Sebagian besar usaha mempekerjakan kurang dari lima orang. Tenaga kerja dibayar mencapai 74,90%, lebih besar daripada pekerja tidak dibayar. Ini menandakan usaha yang lebih berorientasi bisnis ketimbang usaha keluarga.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="provinsi"><div class="wrap grid">
+  <header><h2>Sebaran provinsi</h2><p>Data dari Lampiran 1 dan 3. Jumlah usaha menunjukkan di mana pelaku berkumpul; penetrasi menunjukkan seberapa banyak usaha setempat yang sudah berjualan online.</p></header>
+  <div>
+    <div class="tabs" role="group" aria-label="Pilih ukuran">
+      <button type="button" data-tab="count" aria-pressed="true">Jumlah usaha</button>
+      <button type="button" data-tab="pen" aria-pressed="false">Penetrasi online</button>
+    </div>
+    <div class="prov" id="p-count">
+      <ul class="bars tone-teal">
+        {byCount.map(([n, c, rse], i) => (
+          <li class={i === 0 ? 'first' : ''}><span class="lbl">{n}{rse >= 25 && <span class="flag" title="Relative standard error tinggi">RSE tinggi</span>}</span><span class="track"><span class="fill" style={`--w:${Math.max((c / maxCount) * 100, 0.8)}%`}></span></span><span class="val">{id(c, 0)}</span></li>
+        ))}
+      </ul>
+    </div>
+    <div class="prov" id="p-pen" hidden><Bars items={byPen} max={100} /></div>
+    <p class="note">Total semua provinsi sekitar 4,40 juta usaha. Jawa Barat (709.851), Jawa Timur (690.542), Jawa Tengah (625.695), dan DKI Jakarta (462.782) memimpin. Penetrasi tertinggi ada di DKI Jakarta (63,54%), DI Yogyakarta (56,72%), Lampung (52,17%), Bali (51,37%), dan Kalimantan Timur (50,61%); Jawa Timur hanya 37,54%. Tanda "RSE tinggi" menandai estimasi kurang andal (Papua Tengah dan Papua Pegunungan); BPS menoleransi RSE di bawah 33%.</p>
+  </div>
+</div></section>
+
+<section class="s" id="aktivitas"><div class="wrap grid">
+  <header><h2>Aktivitas usaha</h2><p>Lewat apa mereka berjualan, apa yang dijual, kepada siapa, dan bagaimana barang sampai.</p></header>
+  <div>
+    <h3>Media penjualan online</h3>
+    <Bars items={d.media} tone="sun" />
+    <p class="note">Satu usaha bisa memakai beberapa media sehingga total melebihi 100%. WhatsApp adalah pesan instan terpopuler, Instagram media sosial terpopuler, dan Shopee marketplace terpopuler.</p>
+    <h3>Barang dan jasa yang dijual</h3>
+    <Bars items={d.barang} />
+    <div class="two">
+      <div><h3>Pelanggan utama</h3><Bars items={d.pelanggan} tone="ink" /></div>
+      <div><h3>Metode pengiriman tersering</h3><Bars items={d.pengiriman} tone="ink" /></div>
+    </div>
+    <h3>Wilayah pengiriman</h3>
+    <Bars items={d.wilayah} />
+    <div class="stat"><b>{id(d.ekspor.domestik)}%</b><span>usaha menjual ke dalam negeri; hanya {id(d.ekspor.ekspor)}% yang pernah menjual ke luar negeri.</span></div>
+  </div>
+</div></section>
+
+<section class="s alt" id="teknologi"><div class="wrap grid">
+  <header><h2>Teknologi dan transformasi digital</h2><p>Aktivitas online sudah luas, tetapi perangkat, pelatihan, dan pembayaran digital masih tertinggal.</p></header>
+  <div>
+    <div class="stat"><b>{id(d.komputer)}%</b><span>usaha e-commerce memakai komputer (laptop, PC, atau tablet) untuk menjalankan usaha.</span></div>
+    <h3>Pemanfaatan internet selain berjualan</h3>
+    <Bars items={d.internetUse} tone="ink" />
+    <h3>Pelatihan teknologi informasi</h3>
+    <div class="stat"><b>{id(d.pelatihan.pernah)}%</b><span>usaha pernah mengikuti pelatihan terkait pemanfaatan teknologi informasi dalam lima tahun terakhir.</span></div>
+    <p class="t">Dari yang pernah ikut, {id(d.pelatihan.swasta)}% dilatih pihak swasta dan {id(d.pelatihan.pemerintah)}% oleh pemerintah. Level pelatihan: dasar {id(d.pelatihan.dasar)}%, terampil {id(d.pelatihan.terampil)}%, ahli {id(d.pelatihan.ahli)}%. Jawaban bisa lebih dari satu, jadi tidak dijumlahkan ke 100%.</p>
+    <h3>Metode pembayaran yang paling sering dipakai</h3>
+    <Bars items={d.bayar} tone="sun" />
+  </div>
+</div></section>
+
+<section class="s" id="dampak"><div class="wrap grid">
+  <header><h2>Dampak ekonomi dan tantangan</h2><p>Nilai transaksi naik, tetapi tidak semua pelaku ikut merasakannya.</p></header>
+  <div>
+    <h3>Nilai transaksi e-commerce</h3>
+    <Bars items={[{ label: '2023', value: d.transaksi.t2023 }, { label: '2024', value: d.transaksi.t2024 }]} unit=" T" top={false} tone="ink" />
+    <p class="note">Naik Rp{id(naikTrilun)} triliun (+{id(d.transaksi.naik)}%). Total pendapatan usaha e-commerce 2024 tercatat Rp2.854 triliun; angka ini mengukur konsep berbeda dari nilai transaksi, jadi jangan dibagi satu sama lain.</p>
+    <h3>Marketplace atau bukan?</h3>
+    <div class="flow">
+      <div class="ring" style={`--p:${d.transaksi.marketplace}`} role="img" aria-label="Marketplace 15,79 persen"><i>{id(d.transaksi.marketplace)}%</i></div>
+      <p class="t" style="flex:1;min-width:240px">Marketplace hanya menyumbang {id(d.transaksi.marketplace)}% nilai transaksi (Rp{id(d.transaksi.marketplaceTriliun)} triliun). Sisanya, {id(100 - d.transaksi.marketplace)}%, terjadi lewat media sosial, pesan instan, dan kanal lain di luar marketplace.</p>
+    </div>
+    <h3>Perubahan pendapatan usaha, 2024 dibanding 2023</h3>
+    <div class="split" role="img" aria-label="Naik 19 persen, tetap 55,49 persen, turun 25,5 persen"><span class="a" style={`width:${d.pendapatan[0].value}%`}>{id(d.pendapatan[0].value, 0)}%</span><span class="b" style={`width:${d.pendapatan[1].value}%`}>Tetap {id(d.pendapatan[1].value)}%</span><span class="c" style={`width:${d.pendapatan[2].value}%`}>Turun {id(d.pendapatan[2].value)}%</span></div>
+    <p class="legend">Hijau-biru: naik. Abu: tetap. Merah: turun. BPS menilai ada ketimpangan: sebagian kecil usaha besar memanfaatkan peluang digital secara optimal, sementara usaha kecil dan menengah menghadapi banyak kendala. Ekonomi nasional tumbuh {id(d.transaksi.pdb)}% pada 2024.</p>
+    <h3>Kendala utama</h3>
+    <Bars items={d.kendala} tone="ink" />
+    <p class="t">Akses internet masyarakat naik dari {id(d.transaksi.internet2023)}% ke {id(d.transaksi.internet2024)}% (Susenas), jadi calon pembeli bertambah, tetapi kemampuan pelaku usaha mengelola bisnis digital belum ikut naik.</p>
+  </div>
+</div></section>
+
+<section class="s alt" id="catatan"><div class="wrap grid">
+  <header><h2>Cara membaca angka</h2><p>Beberapa hal yang sering salah ditafsirkan dari publikasi ini.</p></header>
+  <div>
+    <ul class="rules">
+      <li><b>Persentase usaha tidak sama dengan pangsa transaksi.</b>17,23% usaha memakai marketplace, tetapi marketplace hanya 15,79% nilai transaksi.</li>
+      <li><b>Pilihan ganda tidak dijumlahkan.</b>Media penjualan, alasan belum online, dan wilayah pengiriman boleh dipilih lebih dari satu.</li>
+      <li><b>Transaksi naik belum tentu pendapatan naik.</b>Nilai transaksi tumbuh 17,08%, tetapi 55,49% usaha melaporkan pendapatan tetap.</li>
+      <li><b>Dua angka dalam laporan tidak konsisten.</b>Ringkasan eksekutif menulis "usaha mikro dan kecil 97,38%", padahal Gambar 4 menunjukkan mikro saja 97,38% dan kecil 2,08%. Teks laki-laki 55,52% berbeda tipis dari grafik (55,53%); situs ini memakai angka grafik.</li>
+      <li><b>Ini data 2024.</b>Cocok sebagai gambaran struktur pasar, bukan kondisi terkini.</li>
+    </ul>
+    <h3>Metodologi</h3>
+    <p class="t">Data berasal dari Survei E-Commerce 2025 (kuesioner VECOM25.L untuk listing dan VECOM25.S untuk usaha e-commerce) dengan acuan waktu 2024. Sampel dipilih bertahap dengan stratifikasi: {id(d.survei.blokSensus, 0)} blok sensus dan {id(d.survei.sampel, 0)} usaha. Pencacahan memakai wawancara CAPI lewat aplikasi FASIH. Definisi e-commerce mengacu OECD 2009: pesanan diterima lewat jaringan komputer, sedangkan pembayaran dan pengiriman boleh offline. Pesanan lewat telepon, SMS, faksimile, atau e-mail yang diketik manual tidak dihitung.</p>
+    <div class="interp">
+      <h3>Interpretasi (bukan data BPS)</h3>
+      <ul>
+        <li>Pesan instan dan kanal non-marketplace mendominasi, sehingga alat bantu pengelolaan pesanan lintas kanal tampak relevan.</li>
+        <li>Pemakaian komputer rendah menunjukkan alat yang bisa dipakai dari ponsel kemungkinan lebih cocok. Ini hipotesis; laporan tidak mengukur perangkat ponsel.</li>
+        <li>Pembayaran tunai dominan, jadi sistem yang memaksa pembayaran digital berisiko ditolak pelaku usaha.</li>
+        <li>Hanya 3,56% usaha pernah dilatih, sehingga panduan dan pendampingan penggunaan penting. Kesediaan membayar belum diukur dan perlu divalidasi ke calon pengguna.</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">Sumber: Badan Pusat Statistik, <em>Statistik E-Commerce 2024</em>, Volume 7, 2025 (katalog {d.meta.katalog}, nomor publikasi {d.meta.publikasi}). Ringkasan ini disusun dari PDF publikasi; angka dibaca dari teks dan grafik, jadi periksa ke sumber resmi di <a href="https://www.bps.go.id">bps.go.id</a> untuk keperluan kutipan.</div></footer>
+
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('.tabs button');
+  btns.forEach((b) => b.addEventListener('click', () => {
+    btns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    document.getElementById('p-count')!.hidden = b.dataset.tab !== 'count';
+    document.getElementById('p-pen')!.hidden = b.dataset.tab !== 'pen';
+  }));
+</script>
+</body>
+</html>

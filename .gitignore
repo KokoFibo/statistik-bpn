@@ -1,0 +1,58 @@
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.output/
+.astro/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Package manager
+.npm/
+.pnpm-store/
+
+# Cache
+.cache/
+.temp/
+tmp/
+
+# Testing
+coverage/
+playwright-report/
+test-results/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE and editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Local development
+.vercel/
+.netlify/
+.wrangler/
+
+# TypeScript
+*.tsbuildinfo
+
+# Miscellaneous
+*.local

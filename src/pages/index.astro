@@ -1,0 +1,13 @@
+---
+import '../styles/global.css';
+const laporan = [
+  { href: '/ecommerce', judul: 'Statistik E-Commerce 2024', ket: 'BPS, terbit November 2025. Usaha online, transaksi, teknologi, dan tantangan pelaku.', angka: '4,40 juta usaha' },
+  { href: '/kesejahteraan', judul: 'Statistik Kesejahteraan Rakyat 2025', ket: 'BPS, Susenas Maret 2025. Pendidikan, kesehatan, perumahan, TIK, dan kesenjangan wilayah.', angka: '78,04% berjaminan kesehatan' },
+];
+---
+<!doctype html><html lang="id"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>Ringkasan Laporan Statistik BPS</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet" /></head>
+<body>
+<header class="hero"><div class="wrap" style="padding-bottom:64px"><h1>Laporan statistik, diringkas</h1><p class="lead">Ringkasan dan analisis mendalam publikasi BPS, satu laporan per halaman.</p></div></header>
+<section class="s"><div class="wrap"><ul class="hub">{laporan.map((l) => <li><a href={l.href}>{l.judul}</a><b>{l.angka}</b><p>{l.ket}</p></li>)}</ul></div></section>
+</body></html>
